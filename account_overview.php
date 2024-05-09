@@ -80,16 +80,16 @@ $get_account_info_result = mysqli_query($conn, $get_account_info_query);
     </style>
 </head>
 <body>
-    
+
     <div class="atm-container">
 
         <div class="atm-title"> Account Overview</div>
         <div class="account-info"> <h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
-        
+
 
 <div id="accordion">
 
-<?php 
+<?php
 // Display account information dynamically
 if(mysqli_num_rows($get_account_info_result) > 0) {
     while($row = mysqli_fetch_assoc($get_account_info_result)) {
@@ -99,7 +99,7 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
         $account_number = $row['account_number'];
         $pin = $row['pin'];
 ?>
-  
+
 <div class="card">
     <div class="card-header" id="heading<?php echo $accountname . $account_number; ?>">
         <h5 class="mb-0">
@@ -121,7 +121,7 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
     </div>
 </div>
 
-<?php 
+<?php
     }
 } else {
     echo "<h3>No accounts found.</h3>";
@@ -129,7 +129,7 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
 ?>
 </div>
 
-  
+
     </div>
 
 
