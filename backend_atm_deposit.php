@@ -1,11 +1,7 @@
-
-
 <?php 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start(); 
-
-
 
 // Check if user is logged in
 if(!isset($_SESSION['username'])) {
@@ -21,20 +17,6 @@ $conn = mysqli_connect("localhost", "root", "", "users");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
-// get account information for the logged-in user
-$username = $_SESSION['username'];
-$get_account_info_query = "SELECT * FROM checkinginfo WHERE customer_id = (SELECT customer_id FROM customers WHERE username = '$username')";
-$get_account_info_result = mysqli_query($conn, $get_account_info_query);
-
-// Store  account data in an array
-$accounts = array();
-if(mysqli_num_rows($get_account_info_result) > 0) {
-    while($row = mysqli_fetch_assoc($get_account_info_result)) {
-        $accounts[] = $row;
-    }
-}
-
 ?>
 
 <html lang="en">
@@ -99,48 +81,61 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
         <div class="atm-title"> BANK OF "" ATM</div>
         <div class="account-info"> <h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
+<?php
+$depositMessage = '';
 
-<?php 
-// Process deposit if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if an account is selected for deposit
     if (!isset($_POST['account'])) {
-        // No account selected, display error message
-             $depositMessage = "Please select an account to deposit into. <br>";
-
-
+        $depositMessage = "Please select an account to deposit into. <br>";
     } else {
-        // Retrieve form data
         $selectedAccount = $_POST['account'];
         $depositAmount = $_POST['amount'];
 
-    // Update balance in the database
-    $updateBalanceQuery = "UPDATE checkinginfo SET balance = balance + $depositAmount WHERE accountname = '$selectedAccount'";
-   if (mysqli_query($conn, $updateBalanceQuery)) {
-    // Deposit successful
-     $depositMessage = "Deposit of $depositAmount into $selectedAccount successful. <br>";
-} else {
-    // Deposit failed
-    echo "Error: " . mysqli_error($conn);
-}
+        $updateBalanceQuery = "UPDATE checkinginfo SET balance = balance + $depositAmount WHERE accountname = '$selectedAccount'";
 
-}
+        if (mysqli_query($conn, $updateBalanceQuery)) {
+            $username = $_SESSION['username'];
+            $get_customer_id_query = "SELECT customer_id FROM customers WHERE username = '$username'";
+            $customer_id_result = mysqli_query($conn, $get_customer_id_query);
+
+            if (mysqli_num_rows($customer_id_result) > 0) {
+                $row = mysqli_fetch_assoc($customer_id_result);
+                $customerId = $row['customer_id'];
+
+                // Insert transaction record into transactions table
+                $insertTransactionQuery = "INSERT INTO transactions (customer_id, amount, description) VALUES ('$customerId', '$depositAmount', 'ATM Deposit')";
+
+                if (mysqli_query($conn, $insertTransactionQuery)) {
+                    // Transaction record inserted successfully
+                    $depositMessage = "Deposit of $depositAmount into $selectedAccount successful. <br>";
+                } else {
+                    $depositMessage = "Error inserting transaction record: " . mysqli_error($conn) . "<br>";
+                }
+            } else {
+                $depositMessage = "Error: Failed to fetch customer ID. <br>";
+            }
+        } else {
+            $depositMessage = "Error: " . mysqli_error($conn);
+        }
+    }
 }
 
 mysqli_close($conn); // Close database connection
 ?>
 
-<div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Deposit Result</h5>
-                <p class="card-text"><?php echo $depositMessage ?? ''; ?></p>
-                <a href="atm.php" class="btn btn-primary">Back to ATM Interface</a>
-            </div>
+
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Deposit Result</h5>
+            <p class="card-text"><?php echo $depositMessage ?? ''; ?></p>
+            <a href="atm.php" class="btn btn-primary">Back to ATM Interface</a>
         </div>
     </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
 </body>
 </html>
