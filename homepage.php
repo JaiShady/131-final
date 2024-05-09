@@ -1,5 +1,5 @@
 <?php
- session_start(); // Start the session
+ session_start(); 
 
  include('php/backend_navbar.php'); ?>
 
@@ -27,12 +27,12 @@ body {
         .dropdownmenu ul {
             list-style: none;
             width: 100%;
-            text-align: center; /* Center the parent menu */
+            text-align: center; 
             padding: 0;
         }
 
         .dropdownmenu li {
-            display: inline-block; /* Display as inline-block */
+            display: inline-block; 
             position: relative;
         }
 
@@ -98,7 +98,7 @@ body {
                 <a href="#">Accounts</a>
                  <ul class="submenu">
                      <li><a href="account_overview.php">Account overview</a></li>
-                    <li><a href="#">Transaction History</a></li>
+                    <li><a href="homepage_Treport.php">Transaction History</a></li>
                     <li><a href="manage_account.php"> manage account </a></li>
 
                  </ul>
@@ -116,8 +116,7 @@ body {
             <li>
                 <a href="#">Profile and Settings</a>
                 <ul class="submenu">
-                    <li><a href="#">Contact Information</a></li>
-                    <li><a href="#">Security</a></li>
+                    <li><a href="homepage_contact_update.php">Contact Information</a></li>
                     <li><a href="manage_profile.php">Manage Profile</a></li>
                 </ul>
             </li>
@@ -142,27 +141,21 @@ body {
 <?php 
 session_start(); 
 
-// Check if user is logged in
 if(!isset($_SESSION['username'])) {
-    // Redirect user to login page if not logged in
     header("Location: login.php");
     exit();
 }
 
-// Establish database connection
 $conn = mysqli_connect("localhost", "root", "", "users");
 
-// Check connection
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// get account name and balance for the logged-in user
 $username = $_SESSION['username'];
 $get_account_info_query = "SELECT accountname, balance FROM checkinginfo WHERE customer_id = (SELECT customer_id FROM customers WHERE username = '$username')";
 $get_account_info_result = mysqli_query($conn, $get_account_info_query);
 
-// Display account name and balance
 if(mysqli_num_rows($get_account_info_result) > 0) {
     while($row = mysqli_fetch_assoc($get_account_info_result)) {
         $accountname = $row['accountname'];
