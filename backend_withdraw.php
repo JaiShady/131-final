@@ -146,6 +146,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h5 class="card-title">Withdrawal Result</h5>
                 <p class="card-text"><?php echo $withdrawMessage ?? ''; ?></p>
                 <a href="withdraw.php" class="btn btn-primary">Back to withdraw Interface</a>
+                <br>
+                <br>
+                <a href="homepage.php" class="btn btn-primary">Back to homepage </a>
             </div>
         </div>
     </div>
