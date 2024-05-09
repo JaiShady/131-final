@@ -19,7 +19,7 @@ mysqli_stmt_bind_param($get_customer_id_stmt, "s", $username);
 mysqli_stmt_execute($get_customer_id_stmt);
 $get_customer_id_result = mysqli_stmt_get_result($get_customer_id_stmt);
 
-if(mysqli_num_rows($get_customer_id_result) > 0.00) {
+if(mysqli_num_rows($get_customer_id_result) > 0) {
     $row = mysqli_fetch_assoc($get_customer_id_result);
     $customer_id = $row['customer_id'];
 
@@ -30,8 +30,8 @@ if(mysqli_num_rows($get_customer_id_result) > 0.00) {
     mysqli_stmt_execute($check_pin_stmt);
     $check_pin_result = mysqli_stmt_get_result($check_pin_stmt);
 
-    if(mysqli_num_rows($check_pin_result) > 0.00) {
-        // Check if account balance is negative
+    if(mysqli_num_rows($check_pin_result) > 0) {
+        // Check account balance
         $get_balance_query = "SELECT balance FROM checkinginfo WHERE customer_id = ? AND account_number = ?";
         $get_balance_stmt = mysqli_prepare($conn, $get_balance_query);
         mysqli_stmt_bind_param($get_balance_stmt, "ii", $customer_id, $account_number);
@@ -40,13 +40,32 @@ if(mysqli_num_rows($get_customer_id_result) > 0.00) {
         $balance_row = mysqli_fetch_assoc($balance_result);
         $balance = $balance_row['balance'];
 
-        if ($balance >= 0.00) {
-               echo "<div class='error-message'>Error: Account has funds. Please transfer funds to different account before closing.</div>";
-               echo"<a href='transfer.php'>Go to Transfer</a> <br>";
-            echo "<a href='homepage.php'>Back to homepage</a>";
+        if ($balance == 0.00) {
+            // Close account
+            $close_account_query = "DELETE FROM checkinginfo WHERE customer_id = ? AND account_number = ?";
+            $close_account_stmt = mysqli_prepare($conn, $close_account_query);
+            mysqli_stmt_bind_param($close_account_stmt, "ii", $customer_id, $account_number);
+            
+            if (mysqli_stmt_execute($close_account_stmt)) {
+                echo "<div class='success-message'>SUCCESS: Account closed successfully.</div>";
+                echo "<a href='homepage.php'>Back to homepage</a>";
+            } else {
+                echo "<div class='error-message'>Error: " . mysqli_error($conn) . "</div>";
+                echo "<a href='homepage.php'>Back to homepage</a>";
+            }
+        } elseif ($balance < 0) {
+            // Redirect to deposit
+            echo "<div class='error-message'>Error: balance cannot be negative for the account.</div>";
+        echo "<a href='homepage.php'>Back to homepage <br> </a>";
+        echo "<a href='deposit.php'>to deposits</a>";
+
         } else {
-            echo "<div class='error-message'>Error: Account balance is negative. Please bring to current before closing.</div>";
-            echo "<a href='homepage.php'>Back to homepage</a>";
+            // Redirect to transfer
+            echo "<div class='error-message'>Error: balance must be empty .</div>";
+        echo "<a href='homepage.php'>Back to homepage</a> <br>";
+        echo "<a href='deposit.php'>to deposits</a> <br>";
+        echo "<a href='transfer.php'>to deposits</a>";
+
         }
     } else {
         echo "<div class='error-message'>Error: Incorrect PIN for the provided account.</div>";
@@ -59,3 +78,5 @@ if(mysqli_num_rows($get_customer_id_result) > 0.00) {
 
 mysqli_close($conn);
 ?>
+
+
