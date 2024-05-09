@@ -1,4 +1,4 @@
-<?php  include('php/backend_Adminnavbar.php');
+<?php  include('backend_Adminnavbar.php');
 
 include 'connect.php';
 
@@ -35,8 +35,8 @@ include 'connect.php';
 
 
 
-
-        $sql= "Select * from `transactions`";
+        $customer_id = $_GET['transactionsid'];
+        $sql= "Select * from `transactions` where customer_id=$customer_id";
         $result=mysqli_query($con,$sql);
         
         if($result){

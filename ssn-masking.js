@@ -1,4 +1,4 @@
-const socialSecurityNumberInput = document.getElementById('ssnInput');
+const socialSecurityNumberInput = document.getElementById('social_security_number');
 let previousValue = ''; // Store the previous value
 
 socialSecurityNumberInput.addEventListener('input', function() {

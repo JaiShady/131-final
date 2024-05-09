@@ -1,5 +1,5 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 
 // Check if user is logged in
 if(!isset($_SESSION['username'])) {
@@ -93,48 +93,54 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
         <div class="atm-title">BANK OF "" ATM</div>
         <div class="account-info"><h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
-
-
-<?php 
+<?php
 // Process withdraw if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if an account is selected for deposit
     if (!isset($_POST['account'])) {
         // No account selected, display error message
-        echo "Please select an account to deposit into. <br>";
+        echo "Please select an account to withdraw into. <br>";
 
     } else {
-    // Retrieve form data
-    $selectedAccount = $_POST['account'];
-    $withdrawAmount = $_POST['amount'];
+        // Retrieve form data
+        $selectedAccount = $_POST['account'];
+        $withdrawAmount = $_POST['amount'];
 
-    // Update balance in the database
-    $updateBalanceQuery = "UPDATE checkinginfo SET balance = balance - $withdrawAmount WHERE accountname = '$selectedAccount'";
-   if (mysqli_query($conn, $updateBalanceQuery)) {
-    // Check if balance becomes negative
-    $checkBalanceQuery = "SELECT balance FROM checkinginfo WHERE accountname = '$selectedAccount'";
-    $checkBalanceResult = mysqli_query($conn, $checkBalanceQuery);
-    $balanceRow = mysqli_fetch_assoc($checkBalanceResult);
-    $newBalance = $balanceRow['balance'];
-    
-    if ($newBalance < 0) {
-        // Balance becomes negative
-        $withdrawMessage = "Withdrawal of $withdrawAmount from $selectedAccount successful, but the balance is now negative.";
-    } else {
-        // Balance remains non-negative
-        $withdrawMessage = "Withdrawal of $withdrawAmount from $selectedAccount successful.";
+        // Update balance in the database
+        $updateBalanceQuery = "UPDATE checkinginfo SET balance = balance - $withdrawAmount WHERE accountname = '$selectedAccount'";
+
+        if (mysqli_query($conn, $updateBalanceQuery)) {
+            // Check if balance becomes negative
+            $checkBalanceQuery = "SELECT balance FROM checkinginfo WHERE accountname = '$selectedAccount'";
+            $checkBalanceResult = mysqli_query($conn, $checkBalanceQuery);
+            $balanceRow = mysqli_fetch_assoc($checkBalanceResult);
+            $newBalance = $balanceRow['balance'];
+
+            if ($newBalance < 0) {
+                // Balance becomes negative
+                $withdrawMessage = "Withdrawal of $withdrawAmount from $selectedAccount successful, but the balance is now negative.";
+            } else {
+                // Balance remains non-negative
+                $withdrawMessage = "Withdrawal of $withdrawAmount from $selectedAccount successful.";
+                
+                // Retrieve customer_id for the logged-in user
+                $username = $_SESSION['username'];
+                $get_customer_id_query = "SELECT customer_id FROM customers WHERE username = '$username'";
+                $customer_id_result = mysqli_query($conn, $get_customer_id_query);
+                $customer_id_row = mysqli_fetch_assoc($customer_id_result);
+                $customer_id = $customer_id_row['customer_id'];
+                
+                // Insert transaction record into transactions table
+                $description = "ATM Withdrawal from $selectedAccount";
+                $insertTransactionQuery = "INSERT INTO transactions (customer_id, amount, description) VALUES ('$customer_id', '$withdrawAmount', 'ATM Withdrawal')";
+                mysqli_query($conn, $insertTransactionQuery);
+            }
+        } else {
+            // Withdraw failed
+            $withdrawMessage = "Error: " . mysqli_error($conn);
+        }
     }
-    
-} else {
-    // withdraw failed
-    $withdrawMessage = "Error: " . mysqli_error($conn);
 }
-
-}
-
-}
-
-mysqli_close($conn); // Close database connection
 ?>
 
 

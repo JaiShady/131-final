@@ -53,8 +53,6 @@
     <input class="register-btn" type="submit" value="Register">
 </form>
 
-<script src="ssn-masking.js"></script>
-
 </body>
 
 </html>

@@ -1,5 +1,5 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 
 // Check if user is logged in
 if(!isset($_SESSION['username'])) {
@@ -16,52 +16,68 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
 // Retrieve form data
 $sourceAccount = $_POST['source_account'];
 $destinationAccount = $_POST['destination_account'];
 $transferAmount = $_POST['amount'];
 
 // Check if source and destination accounts are provided
-if (empty($sourceAccount) || empty($destinationAccount)) {
-    $transferMessage = "Error: Please select both source and destination accounts.";
-} elseif ($sourceAccount == $destinationAccount) { // Check if source and destination are the same
-    $transferMessage = "Error: Source and destination accounts cannot be the same.";
-} else {
-    // Check if transfer amount is valid
-    if ($transferAmount <= 0) {
-        $transferMessage = "Error: Transfer amount must be greater than zero.";
+    if (empty($sourceAccount) || empty($destinationAccount)) {
+        $transferMessage = "Error: Please select both source and destination accounts.";
+    } elseif ($sourceAccount == $destinationAccount) { // Check if source and destination are the same
+        $transferMessage = "Error: Source and destination accounts cannot be the same.";
     } else {
-        // Check if source account has sufficient balance
-        $sourceBalanceQuery = "SELECT balance FROM checkinginfo WHERE accountname = '$sourceAccount'";
-        $sourceBalanceResult = mysqli_query($conn, $sourceBalanceQuery);
-        if ($sourceBalanceResult) {
-            $sourceBalanceRow = mysqli_fetch_assoc($sourceBalanceResult);
-            $sourceBalance = $sourceBalanceRow['balance'];
-            if ($sourceBalance < $transferAmount) {
-                $transferMessage = "Error: Source account does not have sufficient balance.";
-            } else {
-                // Update balances in the database
-                $updateSourceBalanceQuery = "UPDATE checkinginfo SET balance = balance - $transferAmount WHERE accountname = '$sourceAccount'";
-                $updateDestinationBalanceQuery = "UPDATE checkinginfo SET balance = balance + $transferAmount WHERE accountname = '$destinationAccount'";
-
-                // Execute queries
-                if (mysqli_query($conn, $updateSourceBalanceQuery) && mysqli_query($conn, $updateDestinationBalanceQuery)) {
-                    // Transfer successful
-                    $transferMessage = "Transfer of $transferAmount from $sourceAccount to $destinationAccount successful.";
-                } else {
-                    // Transfer failed
-                    $transferMessage = "Error: " . mysqli_error($conn);
-                }
-            }
+        // Check if transfer amount is valid
+        if ($transferAmount <= 0) {
+            $transferMessage = "Error: Transfer amount must be greater than zero.";
         } else {
-            $transferMessage = "Error: " . mysqli_error($conn);
+            // Check if source account has sufficient balance
+            $sourceBalanceQuery = "SELECT balance FROM checkinginfo WHERE accountname = '$sourceAccount'";
+            $sourceBalanceResult = mysqli_query($conn, $sourceBalanceQuery);
+            if ($sourceBalanceResult) {
+                $sourceBalanceRow = mysqli_fetch_assoc($sourceBalanceResult);
+                $sourceBalance = $sourceBalanceRow['balance'];
+                if ($sourceBalance < $transferAmount) {
+                    $transferMessage = "Error: Source account does not have sufficient balance.";
+                } else {
+                    // Update balances in the database
+                    $updateSourceBalanceQuery = "UPDATE checkinginfo SET balance = balance - $transferAmount WHERE accountname = '$sourceAccount'";
+                    $updateDestinationBalanceQuery = "UPDATE checkinginfo SET balance = balance + $transferAmount WHERE accountname = '$destinationAccount'";
+
+                    // Execute queries
+                    if (mysqli_query($conn, $updateSourceBalanceQuery) && mysqli_query($conn, $updateDestinationBalanceQuery)) {
+                        $transferMessage = "Transfer of $transferAmount from $sourceAccount to $destinationAccount successful.";
+                        
+                        // Retrieve customer_id for the logged-in user
+                        $username = $_SESSION['username'];
+                        $get_customer_id_query = "SELECT customer_id FROM customers WHERE username = '$username'";
+                        $customer_id_result = mysqli_query($conn, $get_customer_id_query);
+                        $customer_id_row = mysqli_fetch_assoc($customer_id_result);
+                        $customer_id = $customer_id_row['customer_id'];
+                        
+                        // Insert transaction record into transactions table
+                        $description = "Transfer from $sourceAccount to $destinationAccount";
+                        $insertTransactionQuery = "INSERT INTO transactions (customer_id, amount, description) VALUES ('$customer_id', '$transferAmount', 'Website Transfer ')";
+                        mysqli_query($conn, $insertTransactionQuery);
+                    } else {
+                        // Transfer failed
+                        $transferMessage = "Error: " . mysqli_error($conn);
+                    }
+                }
+            } else {
+                $transferMessage = "Error: " . mysqli_error($conn);
+            }
         }
     }
 }
 
+
+
+
 mysqli_close($conn); // Close database connection
 ?>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -127,7 +143,11 @@ mysqli_close($conn); // Close database connection
             <div class="card-body">
                 <h5 class="card-title">Transfer Result</h5>
                 <p class="card-text"><?php echo $transferMessage; ?></p>
-                <a href="transfer.php" class="btn btn-primary">Back to transfer Interface</a>
+                <a href="transfer.php" class="btn btn-primary">Back to transfer Interface  </a>
+                <br>
+                <br>
+                <a href="homepage.php" class="btn btn-primary">Back to homepage </a>
+
             </div>
         </div>
     </div>

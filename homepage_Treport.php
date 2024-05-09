@@ -1,4 +1,10 @@
 <?php
+session_start(); // Start the session
+include('navbar.php');
+?>
+
+
+<?php
 $conn = mysqli_connect("localhost", "root", "", "users");
 
 if (!$conn) {

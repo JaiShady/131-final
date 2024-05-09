@@ -1,5 +1,10 @@
-<?php 
-session_start(); 
+<?php
+session_start(); // Start the session
+include('navbar.php');
+?>
+
+<?php
+session_start();
 
 // Check if user is logged in
 if(!isset($_SESSION['username'])) {

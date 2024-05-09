@@ -1,9 +1,11 @@
 
-<?php include('php/backend_Adminnavbar.php'); 
+<?php include('backend_Adminnavbar.php');
 
 
 
 ?>
+
+
 
 <?php
 
@@ -23,6 +25,11 @@ include 'connect.php';
     $zip=$row['zip'];
     $DriverL=$row['DriverL'];
     $SSN=$row['SSN'];
+
+
+
+
+
 
 if(isset($_POST['submit']))
 {

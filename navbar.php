@@ -41,7 +41,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Bank Dashboard</a>
+        <a class="navbar-brand" href="homepage.php">Bank Dashboard</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -57,11 +57,11 @@
                         <li><a class="dropdown-item" href="checking.php">Create Account</a></li>
                         <li><a class="dropdown-item" href="manage_account.php">Manage Accounts</a></li>
                         <li><a class="dropdown-item" href="account_overview.php">Account Overview</a></li>
-                        <li><a class="dropdown-item" href="#">Transaction History</a></li>
+                        <li><a class="dropdown-item" href="homepage_Treport.php">Transaction History</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button"
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink2" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Transactions
                     </a>
@@ -72,10 +72,10 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Employee Portal</a>
+                    <a class="nav-link" href="Admin.php">Employee Portal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="atm.php">ATM</a>
+                    <a class="nav-link" href="atm_login.php">ATM</a>
                 </li>
             </ul>
             <div class="ml-auto"> <!-- Logout button pushed to the far right -->
