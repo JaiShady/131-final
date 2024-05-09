@@ -1,0 +1,64 @@
+/* Body Background (Optional) */
+body {
+    background-color: lightgray; /* Adjust as needed */
+}
+
+/* Card Styling */
+.card.bg-dark.text-white {
+    border-radius: 1rem;
+}
+
+/* Headings */
+.h2.fw-bold.mb-2.text-uppercase {
+    color: white;
+}
+
+/* Text Color Adjustments */
+.text-white-50 {
+    color: #fff !important; /* Override Bootstrap's color for a lighter white */
+}
+
+/* Buttons */
+.btn.btn-outline-light.btn-lg.px-5 {
+    background-color: transparent;
+    border-color: white;
+    color: white;
+}
+
+/* Container and Row Classes (Adjust as needed) */
+.vh-100 {
+    height: 100vh;
+}
+
+.container {
+    padding: 0 75px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Form Styling (Optional) */
+.form-outline {
+    margin-bottom: 1.5rem;
+}
+
+.form-outline .form-label {
+    position: relative;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #fff;
+}
+
+/* Social Media Links (Optional) */
+.fab {
+    font-size: 1.25rem;
+}
+
+.fab.mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
