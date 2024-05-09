@@ -165,7 +165,7 @@ body {
     <div class="card">
       <div class="card-body">
         <h5 class="card-title"><center>Close An Account</h5>
-        <p class="card-text"><center>OH NO! We are sad to see you go. </p>
+        <p class="card-text"><center>OH NO! We are sad to see you go. </center>
         <a href="close_checking.php" class="btn btn-primary"><center>Close An Account</a>
 
       </div>

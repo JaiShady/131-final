@@ -31,14 +31,17 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
 
 ?>
 
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>withdraw Interface</title>
-<style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -49,8 +52,10 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
         .atm-container {
             max-width: 400px;
             margin: 20px auto;
-            background-color: #fff;
-            border: 1px solid #ccc;
+            background-color: #212529; /* Restored box color */
+            color: white; /* Restored white text color */
+            border: 1px solid #212529; /* Border color matches box color */
+            border-radius: 10px; /* Rounded corners */
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             text-align: center;
@@ -85,25 +90,25 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
             font-size: 24px;
             font-weight: bold;
         }
-</style>
-    
+    </style>
+
 </head>
 <body>
-    <div class="atm-container">
-        <div class="atm-title">Withdraw</div>
-        <div class="account-info"> <h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
+<div class="atm-container">
+    <div class="atm-title">Withdraw</div>
+    <div class="account-info"> <h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
-        <div id="accordion">
-            <?php 
-            // Display account information dynamically
-            if(!empty($accounts)) {
-                foreach($accounts as $account) {
-                    $accountname = $account['accountname'];
-                    $balance = $account['balance'];
-                    $credit_card_number = $account['credit_card_number'];
-                    $account_number = $account['account_number'];
-                    $pin = $account['pin'];
-            ?>
+    <div id="accordion">
+        <?php
+        // Display account information dynamically
+        if(!empty($accounts)) {
+            foreach($accounts as $account) {
+                $accountname = $account['accountname'];
+                $balance = $account['balance'];
+                $credit_card_number = $account['credit_card_number'];
+                $account_number = $account['account_number'];
+                $pin = $account['pin'];
+                ?>
                 <div class="card">
                     <div class="card-header" id="heading<?php echo $accountname,  $balance; ?>">
                         <h5 class="mb-0">
@@ -124,50 +129,49 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
                         </div>
                     </div>
                 </div>
-            <?php 
-                }
-            } else {
-                echo "<h3>No accounts found.</h3>";
+                <?php
             }
-            ?>
-            <br>
-            <hr>
+        } else {
+            echo "<h3>No accounts found.</h3>";
+        }
+        ?>
+        <br>
+        <hr>
 
-            <form action="backend_withdraw.php" method="post">
-                <div class="mb-3">
-                    <label for="account" class="form-label">Select Account to Withdraw From:</label>
-                    <?php 
-                    // Display account options dynamically
-                    if(!empty($accounts)) {
-                        foreach($accounts as $account) {
-                            $accountname = $account['accountname'];
-                    ?>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="account" id="account_<?php echo $accountname; ?>" value="<?php echo $accountname; ?>">
-                                <label class="form-check-label" for="account_<?php echo $accountname; ?>">
-                                    <?php echo $accountname; ?>
-                                </label>
-                            </div>
-                    <?php 
-                        }
-                    } else {
-                        echo "<p>No accounts found</p>";
+        <form action="backend_withdraw.php" method="post">
+            <div class="mb-3">
+                <label for="account" class="form-label">Select Account to Withdraw From:</label>
+                <?php
+                // Display account options dynamically
+                if(!empty($accounts)) {
+                    foreach($accounts as $account) {
+                        $accountname = $account['accountname'];
+                        ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="account" id="account_<?php echo $accountname; ?>" value="<?php echo $accountname; ?>">
+                            <label class="form-check-label" for="account_<?php echo $accountname; ?>">
+                                <?php echo $accountname; ?>
+                            </label>
+                        </div>
+                        <?php
                     }
-                    ?>
-                </div>
-                <div class="mb-3">
-                    <label for="amount" class="form-label">Enter Amount to Withdraw:</label>
-                    <input type="number" class="form-control" id="amount" name="amount" min="0" step="0.01" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Withdraw</button>
-            </form>
-        </div>
+                } else {
+                    echo "<p>No accounts found</p>";
+                }
+                ?>
+            </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Enter Amount to Withdraw:</label>
+                <input type="number" class="form-control" id="amount" name="amount" min="0" step="0.01" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background-color: #4c6e99;">Withdraw</button>
+        </form>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
-
 <?php 
 mysqli_close($conn);
 ?>
