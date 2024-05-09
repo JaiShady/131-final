@@ -137,6 +137,9 @@ mysqli_close($conn);
                 <h5 class="card-title">Transfer Result</h5>
                 <p class="card-text"><?php echo $transferMessage; ?></p>
                 <a href="transfer.php" class="btn btn-primary">Back to transfer Interface</a>
+                <br>
+                <br>
+                <a href="homepage.php" class="btn btn-primary">Back to homepage </a>
             </div>
         </div>
     </div>
