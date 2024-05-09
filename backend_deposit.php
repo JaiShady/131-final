@@ -124,6 +124,9 @@ mysqli_close($conn);
                 <h5 class="card-title">Deposit Result</h5>
                 <p class="card-text"><?php echo $depositMessage ?? ''; ?></p>
                 <a href="deposit.php" class="btn btn-primary">Back to deposit Interface</a>
+                 <br>
+                <br>
+                <a href="homepage.php" class="btn btn-primary">Back to homepage </a>
             </div>
         </div>
     </div>
