@@ -7,6 +7,8 @@
     <!-- Link to Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Custom CSS for hover dropdown -->
+<title>Bank Dashboard</title>
+
     <style>
         /* Show dropdown on hover */
         .nav-item.dropdown:hover .dropdown-menu {
@@ -17,6 +19,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #183C67;">
         <div class="container-fluid">
+<a class="navbar-brand" href="Adminpage.php">Bank Dashboard</a>
+
             <a class="navbar-brand" href="homepage.php">
                 <img src="images/logo_transparent.png" alt="" style="width: 100px;">
             </a>
@@ -26,8 +30,8 @@
                         Manager View
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="Accounts.php">Add account</a>
-                        <a class="dropdown-item" href="Transactions.php">Transactions</a>
+                        <a class="dropdown-item" href="">Add account</a>
+                        <a class="dropdown-item" href="">Transactions</a>
                     </div>
                 </li>
                 <li class="nav-item">

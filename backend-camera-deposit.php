@@ -1,3 +1,4 @@
+
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -78,7 +79,7 @@ if (!$conn) {
 </head>
 <body>
     <div class="atm-container">
-        <div class="atm-title"> BANK ATM</div>
+        <div class="atm-title"> BANK OF "" ATM</div>
         <div class="account-info"> <h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
 <?php
@@ -87,10 +88,7 @@ $depositMessage = '';
 // Process deposit if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if an account is selected for deposit
-    if (!isset($_POST['account'])) {
-        // No account selected, display error message
-        $depositMessage = "Please select an account to deposit into. <br>";
-    } else {
+ else {
         // Retrieve form data
         $selectedAccount = $_POST['account'];
         $depositAmount = $_POST['amount'];
@@ -109,42 +107,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $customerId = $row['customer_id'];
 
                 // Insert transaction record into transactions table
-                $insertTransactionQuery = "INSERT INTO transactions (customer_id, amount, description) VALUES ('$customerId', '$depositAmount', 'ATM Deposit')";
 
-                if (mysqli_query($conn, $insertTransactionQuery)) {
-                    // Transaction record inserted successfully
-                    $depositMessage = "Deposit of $depositAmount into $selectedAccount successful. <br>";
-                } else {
-                    // Failed to insert transaction record
-                    $depositMessage = "Error inserting transaction record: " . mysqli_error($conn) . "<br>";
-                }
-            } else {
-                // Failed to fetch customer ID
-                $depositMessage = "Error: Failed to fetch customer ID. <br>";
-            }
-        } else {
-            // Deposit failed
-            $depositMessage = "Error: " . mysqli_error($conn);
-        }
-    }
-}
+<div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Deposit Result</h5>
+                <p class="card-text"><?php echo $depositMessage ?? ''; ?></p>
 
-mysqli_close($conn); // Close database connection
-?>
-
-
-
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Deposit Result</h5>
-            <p class="card-text"><?php echo $depositMessage ?? ''; ?></p>
-            <a href="atm.php" class="btn btn-primary">Back to ATM Interface</a>
+                <a href="deposit.php" class="btn btn-primary">Back to Deposit Inteface </a>
+                <br>
+                <br>
+                <a href="homepage.php" class="btn btn-primary">Back to homepage </a>
+            </div>
         </div>
     </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>

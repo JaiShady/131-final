@@ -136,7 +136,7 @@ mysqli_close($conn); // Close database connection
 </head>
 <body>
     <div class="atm-container">
-        <div class="atm-title">BANK OF "" ATM</div>
+        <div class="atm-title">BANK Transfer</div>
         <div class="account-info"><h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
         <div class="card">

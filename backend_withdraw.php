@@ -91,7 +91,7 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
 <body>
 
      <div class="atm-container">
-        <div class="atm-title">BANK OF "" withdraw</div>
+        <div class="atm-title">BANK Withdraw</div>
         <div class="account-info"><h2>Hello <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></h2></div>
 
 

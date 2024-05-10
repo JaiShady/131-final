@@ -1,3 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Creation Result</title>
+    <style>
+        body {
+            background-color: #212529;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-weight: bold; /* Set default font weight to bold */
+            text-align: center;
+            line-height: 1.5;
+            padding-top: 50px; /* Add some padding to center content vertically */
+        }
+
+        .good-message, .error-message {
+            font-size: 36px; /* Increase font size */
+            margin-bottom: 30px; /* Add margin for vertical spacing */
+        }
+
+        img {
+            display: block;
+            margin: 0 auto; /* Center GIF horizontally */
+            margin-bottom: 20px; /* Add some space below the GIF */
+        }
+
+        a {
+            color: #4c6e99; /* Change link color */
+        }
+    </style>
+</head>
+<body>
+
 <?php
 // Create connection
 $conn = mysqli_connect("localhost", "root", "", "users");
@@ -28,7 +62,7 @@ if(mysqli_num_rows($get_customer_id_result) > 0) {
             VALUES ('$customer_id', '$accountname', '$balance', '$pin', '$creditCardNumber', '$accountNumber')";
 
     if (mysqli_query($conn, $sql)) {
-        echo "<div class='good-message'>SUCCESS: New record created successfully. <br> <img src='giphy2.gif' alt='Success GIF'></div>";
+        echo "<div class='good-message'>SUCCESS: New record created successfully. <br> Account Number: $accountNumber <br> <img src='giphy2.gif' alt='Success GIF'></div>";
         echo "<a href='homepage.php'>CLICK HERE for homepage</a>";
     } else {
         echo "<div class='error-message'>Error: " . $sql . "<br>" . mysqli_error($conn) . "</div>";

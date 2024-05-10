@@ -1,6 +1,18 @@
+
+
+<?php
+session_start(); // Start the session
+
+include('navbar.php'); ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    
+    
     <meta charset="UTF-8">
     <title>Check Deposit (Camera)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
@@ -52,7 +64,7 @@
    
         
     <br>
-    <form action="" method="post">
+    <form action="backend-camera-deposit.php" method="post">
 
         <h3 class="form-group">Username: <input type="text" name="username"></h3>
         <h3 class="form-group">account_number: <input type="text" name="account_number"></h3>

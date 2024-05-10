@@ -171,6 +171,16 @@ if(mysqli_num_rows($get_account_info_result) > 0) {
             </div>
             <button type="submit" class="btn btn-primary" style="background-color: #4c6e99;">Deposit</button>
         </form>
+
+
+<form action="camera-deposit.php" method="post">
+<button type="submit" class="btn btn-primary" style="background-color: #4c6e99;">Deposit Via Check</button>
+
+</form>
+
+
+
+
     </div>
 </div>
 
